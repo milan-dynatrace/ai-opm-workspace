@@ -1,0 +1,1 @@
+"/Archive" is a folder where the original notes, meeting and other documents are archived after they are processed into journals, meetings, or other notes
