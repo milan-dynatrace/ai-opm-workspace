@@ -21,10 +21,12 @@ This is not a plugin or an app. It's a structured Obsidian vault with Claude Cod
 |  - Loose notes    |    |  /communicate       |    |                   |
 |  - Thoughts       |    |  /thought           |    |                   |
 |  - Ideas          |    |  /idea              |    |                   |
-|                   |    |  /ideas-review      |    |                   |
+|  - Tasks          |    |  /ideas-review      |    |                   |
 |                   |    |  /develop           |    |                   |
 |                   |    |  /synthesize        |    |                   |
 |                   |    |  /process-inbox     |    |                   |
+|                   |    |  /task              |    |                   |
+|                   |    |  /task-review       |    |                   |
 |                   |    |                     |    |                   |
 +-------------------+    +---------------------+    +-------------------+
         ^                         |
@@ -40,31 +42,45 @@ This is not a plugin or an app. It's a structured Obsidian vault with Claude Cod
 
 ## What's Included
 
-### 4 Ready-to-Use Skills
+### 12 Ready-to-Use Skills
 
 | Skill | Command | What it does |
 |-------|---------|-------------|
-| **Plan Today** | `/today` | Morning planning ritual: reviews yesterday, triages Todoist, sets focus items with capacity awareness |
-| **Process Meeting** | `/meeting` | Takes your raw meeting notes and structures them: decisions, action items, Todoist tasks, context links |
+| **Plan Today** | `/today` | Morning planning ritual: reviews active tasks, sets focus items with capacity awareness |
+| **Process Meeting** | `/meeting` | Takes your raw meeting notes and structures them: decisions, action items, task creation, context links |
 | **Make Decision** | `/decision [topic]` | Gathers context from your vault and GitHub, presents options with trade-offs, creates documented decision |
 | **Draft Communication** | `/communicate [topic + audience]` | Adapts tone to audience (engineering/leadership/customers), uses your people profiles |
+| **Capture Thought** | `/thought` | Log a fleeting thought or annotate an existing one in the monthly Thoughts log |
+| **Create Idea** | `/idea` | Create an idea file or promote a thought from the Thoughts log into a tracked idea |
+| **Review Ideas** | `/ideas-review` | Review the idea landscape, find themes, surface promotable thoughts |
+| **Develop Idea** | `/develop` | Stress-test and develop an idea — sparring partner, devil's advocate |
+| **Synthesize** | `/synthesize` | Turn a cluster of ideas into a plan, narrative, or strategy brief |
+| **Process Inbox** | `/process-inbox` | Route unstructured Inbox files into structured notes, then archive originals |
+| **Task** | `/task` | Create, update, or query tasks in the task tracking system |
+| **Task Review** | `/task-review` | Ad-hoc task triage and prioritization |
 
 ### 1 Onboarding Skill
 
 | Skill | Command | What it does |
 |-------|---------|-------------|
-| **Personalize** | `/personalize` | Interactive setup: configures CLAUDE.md, Todoist IDs, and people profiles for your specific role and company |
+| **Personalize** | `/personalize` | Interactive setup: configures CLAUDE.md and people profiles for your specific role and company |
 
 ### Vault Structure
 
 ```
-├── Dashboard/             # Living documents (weekly priorities, people profiles)
+├── Dashboard/             # Living documents (Tasks.md, people-profiles.md)
+├── Tasks/                 # Individual task files (T-NNN - Title.md)
+├── Ideas/                 # Developed ideas with lifecycle tracking
+├── Thoughts/              # Monthly rolling log of raw thoughts (YYYY-MM.md)
+├── Inbox/                 # Drop zone for unstructured content
 ├── journals/              # Daily notes (YYYY/MM-Month/DD-MM-YYYY.md)
 ├── Meetings/              # Meeting notes
 ├── Loose Notes/Work/      # Decisions, drafts, analysis
-├── templates/             # Note templates for daily, meeting, and loose notes
-├── .claude/skills/        # Claude Code skills
-└── CLAUDE.md              # The "operating system" - tells Claude who you are and how to work
+├── templates/             # Note templates for daily, meeting, loose notes, ideas, and tasks
+├── Archive/               # Raw source files before processing
+├── .claude/skills/        # Claude Code skills (shared/ for cross-skill utilities)
+├── CLAUDE.md              # The "operating system" - tells Claude who you are and how to work
+└── workspace_changelog.md # Log of all structural workspace changes
 ```
 
 ## Quick Start
@@ -83,7 +99,6 @@ git clone https://github.com/aleksander-dytko/ai-pm-workspace.git
 cd ai-pm-workspace
 
 # 2. Add MCP servers (optional but recommended)
-claude mcp add todoist --transport streamable-http --url https://ai.todoist.net/mcp
 claude mcp add github --transport streamable-http --url https://api.githubcopilot.com/mcp
 
 # 3. Open in Obsidian (Open folder as vault)
@@ -122,7 +137,7 @@ Skills are Markdown files in `.claude/skills/[name]/SKILL.md`. Each skill has:
 
 Ideas for skills you can build:
 
-- **`/weekly-plan`**: Sunday/Monday weekly planning with P-Tasks, Todoist sync, and overplanning detection
+- **`/weekly-plan`**: Sunday/Monday weekly planning with P-Tasks and overplanning detection
 - **`/initiative`**: Track product initiatives by pulling status from external repos
 - **`/reflect`**: Monthly personal reflection agent that analyzes mood/energy patterns from your journals
 

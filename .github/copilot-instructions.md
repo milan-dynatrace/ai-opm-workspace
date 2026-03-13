@@ -50,6 +50,9 @@
 ├── Archive/
 │   ├── Meetings Archive/  # Raw meeting files before processing
 │   └── Notes Archive/     # Raw inbox files before processing
+├── Tomorrow.md            # Scratch pad for next day's carry-overs
+├── Yesterday.md           # Scratch pad for previous day's carry-overs
+├── workspace_changelog.md # Log of all structural workspace changes
 └── .github/
     └── copilot-instructions.md  # This file
 
@@ -112,7 +115,7 @@ Tasks are tracked as individual files in `Tasks/` with a generated dashboard in 
 
 ## Task Cadence
 
-| Frequency | Tasks | Prompt files to use |
+| Frequency | Tasks | Skills to use |
 |-----------|-------|---------------|
 | **Daily** | Morning planning, meeting notes, decisions, communications | `/today`, `/meeting`, `/decision`, `/communicate` |
 | **Ad-hoc** | Task review, triage inbox, reprioritize | `/task-review` |
