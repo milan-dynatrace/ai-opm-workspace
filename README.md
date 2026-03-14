@@ -1,10 +1,21 @@
-# AI PM Workspace
+# AI workspace for non-developers
 
-A blueprint for building an AI-powered product management workspace with [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Obsidian](https://obsidian.md/), and MCP integrations.
+A blueprint for building an AI-powered workspace for non-dev roles with both [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Visual Studio Code] with [GitHub Copilot] and [Obsidian](https://obsidian.md/). It can be extended through MCP integrations.
 
-This is not a plugin or an app. It's a structured Obsidian vault with Claude Code skills that turn your notes into an intelligent PM operating system. Your vault becomes the persistent memory. Claude Code becomes the executor. MCP servers bridge the gap to your tools.
+This is not a plugin or an app. It's a structured Obsidian vault with Claude Code/GitHub Copilot skills that turn your notes into an intelligent operating system for non-developer roles, primary product and program managers. Your vault becomes the persistent memory. Claude Code or GitHub Copilot becomes the executor. MCP servers bridge the gap to your tools.
 
-> **Background**: This template is based on a real PM workspace I built and use daily. I wrote about the approach in [Your AI Has No Memory. Mine Does.](https://productpeak.substack.com/p/your-ai-has-no-memory-mine-does) - this repo is the open-source blueprint that came from the response to that article.
+The workspace works well, but there are likely use cases that won't work exactly as expected. If that happens, debug and use your connected LLM model to update the workspace.
+
+Use the models wisely. I use:
+- Sonnet as default
+- Haiku for simple things like adding new tasks or thoughts
+- Opus for complex topics that require high judgement, like developing ideas or making decisions
+
+**How to start**: tl;dr; Clone this repo and start using it. I started simple with /today to help me organize the day, then moved on to meetings and task capture. 
+
+**Background**: This template is inspired by a blog post [Your AI Has No Memory. Mine Does.](https://productpeak.substack.com/p/your-ai-has-no-memory-mine-does). 
+
+**Questions?** Both Slack and email work. If you share it, I'll appreciate a tag or mention.
 
 ## The Architecture
 
