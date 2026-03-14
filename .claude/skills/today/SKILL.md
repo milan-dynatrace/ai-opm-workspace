@@ -1,24 +1,50 @@
 ---
 name: today
-description: Morning daily planning - fill journal, review tasks, plan focus items
+description: Morning daily planning, mid-day updates, or end-of-day close — fill journal, review tasks, plan focus items
 ---
 
 # Plan Today
 
-You are helping the user plan their day each morning through an interactive flow that fills their Obsidian daily journal and organizes tasks.
+You are helping the user manage their daily journal and tasks. This skill runs in one of three modes depending on the state of today's journal:
+- **Morning planning** — full planning flow (default for new/empty journals)
+- **Update** — add or change something mid-day
+- **Close the day** — guided end-of-day wrap-up
 
 ## Input
 
-The user invokes this skill (typically in the morning) without arguments.
+The user invokes this skill without arguments. The mode is determined automatically.
 
 ## Speed Principles
 
 This skill should be FAST. Minimize round-trips:
-- **Max 3 interactive rounds** (personal questions -> calendar + triage -> focus confirmation)
+- **Max 3 interactive rounds** for morning planning (personal questions -> calendar + triage -> focus confirmation)
+- **Max 2 interactive rounds** for update or close modes
 - **All data fetched before asking anything** - no mid-conversation fetches visible to user
 - **Recommendations only after seeing calendar** - never suggest focus tasks without knowing the meeting load
 
 ## Workflow
+
+### Phase 0: Mode Detection
+
+**Fetch today's journal** (`journals/YYYY/MM-Month/DD-MM-YYYY.md`) before any user interaction.
+
+**Determine mode:**
+- If today's journal **does not exist**, or exists but has **empty mood, energy, and no focus items** → **Morning planning** (continue to Phase 1)
+- If today's journal exists and has **mood + energy filled AND at least one focus item set** → the day has already been planned. Ask the user:
+
+```
+Today's journal is already planned. What would you like to do?
+```
+
+Options:
+1. **Update something** — change or add to today's journal
+2. **Close the day** — wrap up and fill end-of-day sections
+
+Route to the corresponding mode below.
+
+---
+
+## Mode: Morning Planning
 
 ### Phase 1: Parallel Setup + Personal Questions
 
@@ -26,7 +52,7 @@ This skill should be FAST. Minimize round-trips:
 
 Do ALL of these simultaneously:
 - Check if `journals/YYYY/MM-Month/DD-MM-YYYY.md` exists (month folder format: `02-February`)
-- Read yesterday's journal for hints (mood, energy, activities)
+- Read yesterday's journal for hints (mood, energy)
   - Extract "Tomorrow I start with" from yesterday's end-of-day section (if filled) -> use as first focus hint in Phase 3
 - If today's journal doesn't exist, create it using the template (see `templates/daily-note.md`)
 - If it exists, read it to see what's already filled
@@ -35,11 +61,11 @@ Do ALL of these simultaneously:
 
 Only AFTER all fetches complete, ask personal questions.
 
-**1b. Ask personal questions in ONE AskUserQuestion (3-4 questions)**
+**1b. Ask personal questions in ONE AskUserQuestion (2 questions)**
 
 Use yesterday's journal values as hints. This is the only personal question round.
 
-**Questions** (3-4 in AskUserQuestion):
+**Questions** (2 in AskUserQuestion):
 
 1. **Mood** (1-10): "How are you feeling today? (mood 1-10)"
    - Hint with yesterday's mood if available
@@ -49,15 +75,9 @@ Use yesterday's journal values as hints. This is the only personal question roun
    - Hint with yesterday's energy if available
    - Options: "3-4 (low)", "5-6 (medium)", "7-8 (high)", "9-10 (full power)"
 
-3. **Self-care**: "What did you do for yourself before work?"
-   - Options: "Exercise / run", "Walk", "Nothing special", Other (free text)
-
-4. **Yesterday evening**: "How was yesterday after work?"
-   - Options: "Relaxing, no stress", "Active (workout / outing)", "Stressful / tough", Other (free text)
-
 **After receiving answers:**
 - Update frontmatter `mood` and `energy`
-- Fill yesterday and today personal sections in the journal
+- Fill mood and energy in the journal
 - If mood < 6 or energy < 6: set `low_energy = true`
 
 ### Phase 2: Data Overview + Calendar (1 dedicated round)
@@ -194,6 +214,106 @@ Updated: journals/YYYY/MM-Month/DD-MM-YYYY.md
 
 ---
 
+## Mode: Update
+
+For mid-day changes when the journal is already planned.
+
+### Step 1: Ask what to update
+
+Ask a single free-text question:
+
+```
+What do you want to update?
+```
+
+No options — just free text.
+
+### Step 2: Route and execute
+
+Based on the user's response, determine what to do:
+- If it maps clearly to a journal section (e.g., "add a meeting note", "change my second focus item"), make the edit and confirm.
+- If it's about a task (e.g., "mark T-003 as done", "add a new task"), update the task file + regenerate `Dashboard/Tasks.md` and confirm.
+- If it's unclear, ask ONE follow-up question to clarify, then execute.
+
+After the update, confirm briefly:
+```
+Updated: [what was changed]
+```
+
+---
+
+## Mode: Close the Day
+
+Guided end-of-day wrap-up to fill the `🌙 End of Day` section of the journal.
+
+### Step 1: Fetch context (no interaction)
+
+Do ALL of these in parallel:
+- Read today's journal (focus items, notes section)
+- **Read all task files in `Tasks/`** (skip `_counter.md`) — identify tasks that are `in-progress` or were moved to `done` today
+- Read `Dashboard/Tasks.md` — sync any `- [x]` checkboxes to task files (mark as done with changelog entry)
+
+### Step 2: Propose completed tasks + ask what's next (1 round)
+
+Build a proposed list of what was completed today based on:
+- Tasks with status `done` that have a changelog entry dated today
+- Tasks with status `in-progress` (suggest as candidates — "did you finish these?")
+- Today's focus items from the journal
+
+Present:
+
+```
+🌙 Closing the day — [Day of week] [Date]
+
+Based on your tasks and focus items, here's what I think you finished today:
+
+✅ Completed:
+- [[T-NNN - Title]]
+- [[T-NNN - Title]]
+
+🤔 Still in progress (did you finish any of these?):
+- [[T-NNN - Title]]
+- [[T-NNN - Title]]
+
+Anything else you completed that's not listed?
+And: what's the ONE thing you want to start with tomorrow?
+```
+
+Wait for the user to confirm/adjust the completed list, add other items, and provide their "tomorrow I start with" answer.
+
+### Step 3: Execute updates (no interaction)
+
+After confirmation, do ALL in parallel:
+
+**Task updates:**
+- Mark confirmed tasks as `done` in their task files (add changelog entry: `YYYY-MM-DD: marked done via /today close`)
+- Regenerate `Dashboard/Tasks.md`
+
+**Journal update:**
+- Fill `#### ✅ Today I finished:` with the confirmed list (use `[[T-NNN - Title]]` wikilinks for tasks, plain text for non-task items)
+- Fill `#### ➡️ Tomorrow I start with:` with the user's answer
+- Mark `#### 🔒 Work closed.` as complete (add the current time, e.g., `Work closed at 18:05.`)
+
+### Step 4: Summary
+
+```
+Day closed — [Day of week] [Date]
+
+✅ Finished:
+- [[T-NNN - Title]]
+- [[T-NNN - Title]]
+- [other item]
+
+➡️ Tomorrow: [starting point]
+
+Tasks: N marked done | N still in progress
+Updated: journals/YYYY/MM-Month/DD-MM-YYYY.md
+
+Rest well. 🌙
+```
+
+---
+
 ## Priority Limits (STRICT)
 
 Daily task priorities:
@@ -201,9 +321,9 @@ Daily task priorities:
 | Priority | Max tasks | Task value | Description |
 |----------|-----------|---------------|-------------|
 | P1 | 1 | `p1` | THE one most critical task |
-| P2 | 2 | `p1` | High priority |
-| P3 | 3 | `p2` | Medium priority |
-| P4 | unlimited | `p3`/`p4` | Everything else |
+| P2 | 2 | `p2` | High priority |
+| P3 | 3 | `p3` | Medium priority |
+| P4 | unlimited | `p4` | Everything else |
 
 **NEVER exceed these limits.** If user wants more P1/P2 tasks, challenge them to pick.
 
@@ -232,7 +352,3 @@ Daily task priorities:
 - Calendar >50% meetings: reduce focus count
 - Both: 1 focus item only
 - Declining energy trend (last 2-3 days): flag burnout risk
-
-### Todoist IDs
-
-<!-- Task tracking is now handled by the vault's built-in task system in Tasks/. See /task and /task-review skills. -->

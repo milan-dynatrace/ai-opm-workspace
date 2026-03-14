@@ -46,7 +46,7 @@ This is not a plugin or an app. It's a structured Obsidian vault with Claude Cod
 
 | Skill | Command | What it does |
 |-------|---------|-------------|
-| **Plan Today** | `/today` | Morning planning ritual: reviews active tasks, sets focus items with capacity awareness |
+| **Plan Today** | `/today` | Morning planning, mid-day updates, or end-of-day close: reviews active tasks, sets focus items, guides day wrap-up |
 | **Process Meeting** | `/meeting` | Takes your raw meeting notes and structures them: decisions, action items, task creation, context links |
 | **Make Decision** | `/decision [topic]` | Gathers context from your vault and GitHub, presents options with trade-offs, creates documented decision |
 | **Draft Communication** | `/communicate [topic + audience]` | Adapts tone to audience (engineering/leadership/customers), uses your people profiles |

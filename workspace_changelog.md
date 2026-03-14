@@ -4,6 +4,28 @@ All structural changes to this workspace are logged here — new folders, new sk
 
 ---
 
+## 2026-03-14 — Remove self-care and yesterday evening from daily flow
+
+### Updated
+
+- `.claude/skills/today/SKILL.md` — removed self-care and yesterday evening questions from Phase 1b. Reduced from 3-4 questions to 2 (mood + energy only).
+- `templates/daily-note.md` — removed "Yesterday" section (after work, energy/drain) and "What did I do for myself before work?" question. Template now starts with Today section containing mood and energy only.
+
+---
+
+## 2026-03-14 — `/today` skill: multi-mode support (morning, update, close)
+
+### Updated
+
+- `.claude/skills/today/SKILL.md`
+  - Added **Phase 0: Mode Detection** — checks if today's journal is already planned (mood + energy + focus items filled). If so, asks whether to run Update or Close the Day mode instead of morning planning.
+  - Added **Mode: Update** — free-text question for mid-day changes. Routes to the right journal section or task file based on the response. One follow-up if unclear.
+  - Added **Mode: Close the Day** — guided end-of-day wrap-up. Reads task files and dashboard to propose completed tasks (done today + in-progress candidates). User confirms, adjusts, adds extras, and provides "Tomorrow I start with". Marks confirmed tasks as done, regenerates dashboard, fills End of Day journal sections.
+  - Updated description and intro to reflect three modes.
+  - Updated Speed Principles: added max 2 round-trips for update/close modes.
+
+---
+
 ## 2026-03-13 — Documentation audit and accuracy fixes
 
 ### Updated

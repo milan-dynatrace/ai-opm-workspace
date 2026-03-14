@@ -11,22 +11,12 @@ tags:: [[+Daily Notes]]
 << [[Yesterday|Yesterday]] | [[Tomorrow|Tomorrow]] >>
 
 ---
-# 🔙 Yesterday
-
-#### What did I do after work?
--
-
-#### What gave me energy / what drained me?
-- ⚡
-- 🪫
-
----
 # 🌅 Today
 
 #### 🧠 How am I feeling? (mood: _/10)
 -
 
-#### What did I do for myself before work?
+#### ⚡ Energy (_/10)
 -
 
 #### 🚀 My focus today (max 3):
