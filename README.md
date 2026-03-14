@@ -15,7 +15,7 @@ Use the models wisely. I use:
 
 **Background**: This template is inspired by a blog post [Your AI Has No Memory. Mine Does.](https://productpeak.substack.com/p/your-ai-has-no-memory-mine-does). 
 
-**Questions?** Both Slack and email work. If you share it, I'll appreciate a tag or mention.
+**Questions?** Here is my LinkedIn: https://www.linkedin.com/in/milansteskal/. If we work together, both Slack and email work. If you share the workspace, I'll appreciate a tag or mention.
 
 ## The Architecture
 
