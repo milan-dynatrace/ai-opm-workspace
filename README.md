@@ -1,6 +1,6 @@
 # AI workspace for non-developers
 
-A blueprint for building an AI-powered workspace for non-dev roles with both [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Visual Studio Code] with [GitHub Copilot] and [Obsidian](https://obsidian.md/). It can be extended through MCP integrations.
+A blueprint for building an AI-powered workspace for non-dev roles with both [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Visual Studio Code]() with [GitHub Copilot]() and [Obsidian](https://obsidian.md/). It can be extended through MCP integrations.
 
 This is not a plugin or an app. It's a structured Obsidian vault with Claude Code/GitHub Copilot skills that turn your notes into an intelligent operating system for non-developer roles, primary product and program managers. Your vault becomes the persistent memory. Claude Code or GitHub Copilot becomes the executor. MCP servers bridge the gap to your tools.
 
@@ -106,8 +106,8 @@ Use the models wisely. I use:
 
 ```bash
 # 1. Clone this repo
-git clone https://github.com/aleksander-dytko/ai-pm-workspace.git
-cd ai-pm-workspace
+git clone https://github.com/milan-dynatrace/ai-opm-workspace
+cd ai-opm-workspace
 
 # 2. Add MCP servers (optional but recommended)
 claude mcp add github --transport streamable-http --url https://api.githubcopilot.com/mcp
