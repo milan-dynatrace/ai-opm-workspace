@@ -11,7 +11,7 @@ Use the models wisely. I use:
 - Haiku for simple things like adding new tasks or thoughts
 - Opus for complex topics that require high judgement, like developing ideas or making decisions
 
-**How to start**: tl;dr; Clone this repo and start using it. I started simple with /today to help me organize the day, then moved on to meetings and task capture. 
+**How to start**: tl;dr; Fork this repo and start using it. I started simple with /today to help me organize the day, then moved on to meetings and task capture. 
 
 **Background**: This template is inspired by a blog post [Your AI Has No Memory. Mine Does.](https://productpeak.substack.com/p/your-ai-has-no-memory-mine-does). 
 
