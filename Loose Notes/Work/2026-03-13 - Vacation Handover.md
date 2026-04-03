@@ -95,6 +95,15 @@ What shipped, launched, or changed significantly this quarter? Key wins, learnin
 - [ ] **[Karolina Boba]** — Topic: [Updates on DEM compliance guide through documentation team]
   - Due: [date if urgent]
 
+- [ ] **[Carlos]** — Topic: [Sync on onsite booking status]
+  - Due: [soon]
+
+- [ ] **[Carlos]** — Topic: [Updates on automation he implemented while I was on vacation]
+  - Due: [soon]
+
+- [ ] **[Carlos and Bernhard]** — Topic: [Sync on RFE process updates]
+  - Due: [soon]
+
 ---
 
 ## 🚀 First Things to Do (Return Day 1)
@@ -102,6 +111,8 @@ What shipped, launched, or changed significantly this quarter? Key wins, learnin
 1. Sift through new e-mails and Slack messages (specifically in ProdOps and Outbound channels, as well as messages from Carlos)
 2. Get updates on running projects from Carlos
 3. Get updates from Milan on AI workspace improvements
+4. Review meeting recordings and notes from while I was on vacation and add them to the relevant notes in shared Loop space
+5. Decide on whether to add "ProdOps" to template titles for easier discoverability
 
 ---
 
