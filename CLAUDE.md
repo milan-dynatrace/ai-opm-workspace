@@ -90,6 +90,12 @@ You have access to MCP servers configured in your Claude Code environment:
 ├── Archive/
 │   ├── Meetings Archive/  # Raw meeting files before processing
 │   └── Notes Archive/     # Raw inbox files before processing
+├── .claude/
+│   └── skills/
+│       └── shared/        # Shared utilities and templates used by multiple skills
+├── Tomorrow.md            # Scratch pad for next day's carry-overs
+├── Yesterday.md           # Scratch pad for previous day's carry-overs
+├── workspace_changelog.md # Log of all structural workspace changes
 └── CLAUDE.md              # This file
 ```
 
@@ -170,7 +176,7 @@ You have access to MCP servers configured in your Claude Code environment:
 
 | Skill | Command | When to use | MCPs used |
 |-------|---------|-------------|----------|
-| **Plan Today** | `/today` | Morning daily planning and journal fill | - |
+| **Plan Today** | `/today` | Morning planning, mid-day updates, or end-of-day close | - |
 | **Process Meeting** | `/meeting` | Process raw meeting notes into structured notes | - |
 | **Process Inbox** | `/process-inbox` | Route unstructured Inbox files into the right place | - |
 | **Make Decision** | `/decision` | When making product decisions | GitHub, - |
@@ -228,8 +234,7 @@ You have access to MCP servers configured in your Claude Code environment:
 Daily notes follow the template in `templates/daily-note.md`:
 
 **Sections**:
-- **Yesterday**: What happened, energy tracking
-- **Today**: Mood, self-care, focus (max 3 items), tasks
+- **Today**: Mood, energy, focus (max 3 items), tasks
 - **Notes**: Links to meeting notes and loose notes created that day
 - **End of Day**: What was completed, what to start with tomorrow
 

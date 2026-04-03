@@ -50,6 +50,9 @@
 ├── Archive/
 │   ├── Meetings Archive/  # Raw meeting files before processing
 │   └── Notes Archive/     # Raw inbox files before processing
+├── Tomorrow.md            # Scratch pad for next day's carry-overs
+├── Yesterday.md           # Scratch pad for previous day's carry-overs
+├── workspace_changelog.md # Log of all structural workspace changes
 └── .github/
     └── copilot-instructions.md  # This file
 
@@ -112,7 +115,7 @@ Tasks are tracked as individual files in `Tasks/` with a generated dashboard in 
 
 ## Task Cadence
 
-| Frequency | Tasks | Prompt files to use |
+| Frequency | Tasks | Skills to use |
 |-----------|-------|---------------|
 | **Daily** | Morning planning, meeting notes, decisions, communications | `/today`, `/meeting`, `/decision`, `/communicate` |
 | **Ad-hoc** | Task review, triage inbox, reprioritize | `/task-review` |
@@ -150,7 +153,7 @@ Tasks are tracked as individual files in `Tasks/` with a generated dashboard in 
 
 | Skill | Command | When to use | MCPs used |
 |-------|---------|-------------|----------|
-| **Plan Today** | `/today` | Morning daily planning and journal fill | - |
+| **Plan Today** | `/today` | Morning planning, mid-day updates, or end-of-day close | - |
 | **Process Meeting** | `/meeting` | Process raw meeting notes into structured notes | - |
 | **Process Inbox** | `/process-inbox` | Route unstructured Inbox files into the right place | - |
 | **Make Decision** | `/decision` | When making product decisions | GitHub |
@@ -207,8 +210,7 @@ Tasks are tracked as individual files in `Tasks/` with a generated dashboard in 
 Daily notes follow the template in `templates/daily-note.md`:
 
 **Sections**:
-- **Yesterday**: What happened, energy tracking
-- **Today**: Mood, self-care, focus (max 3 items), tasks
+- **Today**: Mood, energy, focus (max 3 items), tasks
 - **Notes**: Links to meeting notes and loose notes created that day
 - **End of Day**: What was completed, what to start with tomorrow
 
