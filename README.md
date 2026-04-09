@@ -84,8 +84,8 @@ Use the models wisely. I use:
 ├── Ideas/                 # Developed ideas with lifecycle tracking
 ├── Thoughts/              # Monthly rolling log of raw thoughts (YYYY-MM.md)
 ├── Inbox/                 # Drop zone for unstructured content
-├── journals/              # Daily notes (YYYY/MM-Month/DD-MM-YYYY.md)
-├── Meetings/              # Meeting notes
+├── journals/              # Daily notes (YYYY/MM-Month/YYYY-MM-DD.md)
+├── Meetings/              # Meeting notes (YYYY/MM-Month/YYYY-MM-DD - Title.md)
 ├── Loose Notes/Work/      # Decisions, drafts, analysis
 ├── templates/             # Note templates for daily, meeting, loose notes, ideas, and tasks
 ├── Archive/               # Raw source files before processing
@@ -99,7 +99,7 @@ Use the models wisely. I use:
 ### Prerequisites
 
 - [Obsidian](https://obsidian.md/)
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (`npm install -g @anthropic-ai/claude-code`)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) (`npm install -g @anthropic-ai/claude-code`) or [Visual Studio Code]() with [GitHub Copilot]()
 - Claude API key or Claude Pro/Max subscription
 
 ### Setup (5 minutes)

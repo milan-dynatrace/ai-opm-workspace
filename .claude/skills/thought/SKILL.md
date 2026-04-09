@@ -70,7 +70,7 @@ Append to the end of `Thoughts/YYYY-MM.md`.
 
 **Step 5: Link in today's journal**
 
-In `journals/YYYY/MM-Month/DD-MM-YYYY.md` under `## Notes`, add:
+In `journals/YYYY/MM-Month/YYYY-MM-DD.md` under `## Notes`, add:
 ```
 - 💭 Thought logged: "[first 60 chars of thought]..." → [[Thoughts/YYYY-MM]]
 ```

@@ -14,7 +14,7 @@ The skill operates in one of three modes based on `$ARGUMENTS`:
 
 | Mode | Arguments | When to use |
 |------|-----------|-------------|
-| **Browse** | (none) or `browse` | List recent files in `Meetings/` and `Inbox/` that look like unprocessed meeting notes |
+| **Browse** | (none) or `browse` | List recent files in `Meetings/` (including subfolders) and `Inbox/` that look like unprocessed meeting notes |
 | **Specific file** | File path or partial name | Process notes from a specific file (in `Meetings/` or `Inbox/`) |
 | **Paste** | Pasted text (long string) | Meeting notes pasted directly into the prompt |
 
@@ -25,7 +25,7 @@ The skill operates in one of three modes based on `$ARGUMENTS`:
 ### Step 0: Determine mode and get raw notes
 
 **If no arguments (Browse mode)**:
-1. List files in `Meetings/` and `Inbox/` folders, sorted by date (newest first)
+1. List files in `Meetings/` (recursively, including year/month subfolders) and `Inbox/` folders, sorted by date (newest first)
 2. Check each file's content - identify files that appear to have raw/unstructured meeting notes (no "## Decisions" section, no structured format); skip `Inbox/README.md`
 3. Show numbered list of unprocessed files
 4. Ask: "Which meeting do you want to process?" - wait for selection
@@ -83,7 +83,7 @@ Read the raw notes and extract:
 
 ### Step 4: Create structured meeting note
 
-- **Location**: `Meetings/YYYY-MM-DD - [Meeting Title].md`
+- **Location**: `Meetings/YYYY/MM-Month/YYYY-MM-DD - [Meeting Title].md`
 - **If source was in `Inbox/`**: delete the original from `Inbox/` after archiving (Step 3.5) and creating the structured note
 - **Template**: `templates/meeting-note.md`
 - **Date**: Use the meeting's actual date, not today's date
@@ -100,7 +100,7 @@ Read the raw notes and extract:
 
 ### Step 5: Link in the meeting's journal
 
-- Find the journal for the **meeting's date**: `journals/YYYY/MM-Month/DD-MM-YYYY.md`
+- Find the journal for the **meeting's date**: `journals/YYYY/MM-Month/YYYY-MM-DD.md`
 - Add link under the `## Notes` section
 - Format: `- [[YYYY-MM-DD - Meeting Title]] - [One-line summary]`
 - If the journal for that date doesn't exist, skip this step
@@ -126,7 +126,7 @@ Read the raw notes and extract:
 ```
 ✅ Meeting note created: [[YYYY-MM-DD - Meeting Title]]
 ✅ Original archived to: Archive/Meetings Archive/[filename]-raw.md
-✅ Linked in journal: [[DD-MM-YYYY]]
+✅ Linked in journal: [[YYYY-MM-DD]]
 
 📋 Proposed tasks (your action items only):
 1. [Task] - [Due date] - Priority: P2
@@ -161,3 +161,4 @@ Wait for confirmation. After confirmation:
 - If no deadline is mentioned for action items, don't set a due date
 - **Always archive the raw source file** (Step 3.5) before writing the structured note — never skip this
 - Meeting notes found in `Inbox/` are treated identically to those in `Meetings/`
+- **When invoked from `/process-inbox`**: this skill runs its full workflow (Steps 0–6). The process-inbox skill passes the file path — use "specific file" mode. Process-inbox handles deleting the original from `Inbox/` after this skill completes.

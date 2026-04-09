@@ -19,7 +19,7 @@ Example: "update engineering on API scope change"
 ## Workflow
 
 1. **Read relevant context**:
-   - Recent meetings in `Meetings/` that discussed this topic
+   - Recent meetings in `Meetings/` (search recursively) that discussed this topic
    - Recent decisions in `Loose Notes/Work/` related to the topic
    - `Dashboard/Weekly P-Tasks.md` for current priorities
    - Any other relevant notes found via search

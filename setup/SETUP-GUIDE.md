@@ -5,7 +5,7 @@ Step-by-step instructions to get your AI PM Workspace running.
 ## Prerequisites
 
 - [Obsidian](https://obsidian.md/) installed
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed (`npm install -g @anthropic-ai/claude-code`)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed (`npm install -g @anthropic-ai/claude-code`) or [Visual Studio Code]() with [GitHub Copilot]()
 - A Claude API key or Claude Pro/Max subscription
 - Git
 

@@ -6,11 +6,8 @@ energy:
 mood:
 ---
 tags:: [[+Daily Notes]]
-# [Day of Week], DD Month YYYY
+# YYYY-MM-DD, [Day of Week]
 
-<< [[Yesterday|Yesterday]] | [[Tomorrow|Tomorrow]] >>
-
----
 # 🌅 Today
 
 #### 🧠 How am I feeling? (mood: _/10)
@@ -19,13 +16,10 @@ tags:: [[+Daily Notes]]
 #### ⚡ Energy (_/10)
 -
 
-#### 🚀 My focus today (max 3):
+#### 🚀 My focus today (aim for 3, flex up to 5):
 1.
 2.
 3.
-
-
-- [ ] Tasks for today are planned and prioritized.
 
 ---
 # 📝 Notes

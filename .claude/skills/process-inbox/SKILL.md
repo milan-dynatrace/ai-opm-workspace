@@ -5,7 +5,7 @@ description: Review and route unstructured content from Inbox/ into structured n
 
 # Process Inbox
 
-You are helping process unstructured files from `Inbox/` — routing each to the right place, creating structured notes, and archiving the originals.
+You are a **router** for unstructured files in `Inbox/`. You classify content, delegate to specialized skills when appropriate, handle non-meeting content directly, and extract tasks from everything you process.
 
 ## Input
 
@@ -40,9 +40,9 @@ For each file, read the full content and determine the **content type**:
 
 | Type | Signals | Route to |
 |------|---------|----------|
-| **Meeting notes** | Attendees, agenda, discussions, decisions | `Meetings/` → process with meeting workflow |
+| **Meeting notes** | Attendees, agenda, discussions, decisions | **Delegate to `/meeting` skill** (full workflow including task extraction) |
 | **Decision** | Options, trade-offs, rationale | `Loose Notes/Work/` → decision template |
-| **Idea seed** | Speculation, "what if", strategy fragments | Flagged for `/idea` workflow (future skill) — for now: `Loose Notes/Work/` as loose note |
+| **Idea seed** | Speculation, "what if", strategy fragments | Flagged for `/idea` workflow — for now: `Loose Notes/Work/` as loose note |
 | **Reference/research** | Pasted articles, links, background reading | `Loose Notes/Work/` → loose note |
 | **Task list / action items** | Bullet checkboxes, "need to", "follow up" | `Loose Notes/Work/` → loose note with checkboxes preserved |
 | **Braindump / journal** | Stream of consciousness, personal reflection | Today's journal `## Notes` section or `Loose Notes/Work/` |
@@ -62,12 +62,13 @@ Confirm? (Y / change type / skip)
 
 ### Step 2: Process each confirmed file
 
-**For Meeting notes** — run the same logic as the `/meeting` skill:
-- Extract title, date, attendees, decisions, action items
-- Create structured note in `Meetings/YYYY-MM-DD - [Title].md` using `templates/meeting-note.md`
-- Link in the meeting's journal date
+**For Meeting notes** — **delegate to the `/meeting` skill entirely**:
+- Pass the file path as input to the meeting skill's "specific file" mode
+- The meeting skill handles everything: analysis, people cross-referencing, related context search, archiving (to `Archive/Meetings Archive/`), structured note creation, journal linking, and task extraction with user confirmation
+- After the meeting skill completes, delete the original from `Inbox/` (the meeting skill already archived it)
+- **Do NOT duplicate** any meeting processing logic here — the meeting skill owns it
 
-**For all other types** — create a structured loose note:
+**For all other types** — process directly as a structured loose note:
 - Location: `Loose Notes/Work/YYYY-MM-DD - [Inferred Title].md`
 - Template: `templates/loose-note.md`
 - Content: Organize the raw content — add a brief summary at the top, preserve original detail below
@@ -83,17 +84,57 @@ Confirm? (Y / change type / skip)
 
 ---
 
-### Step 3: Archive the original
+### Step 3: Extract tasks from non-meeting content
 
-After processing each file:
+**This step applies to all non-meeting content types** (decisions, ideas, references, task lists, braindumps). Meeting notes skip this step — the `/meeting` skill handles their task extraction.
+
+Scan the processed content for potential tasks:
+- Explicit action items: `- [ ]` checkboxes, "need to", "should", "follow up", "TODO"
+- Commitments: "I'll", "I will", "I need to", "let me"
+- Deadlines: anything with a date or timeframe attached to an action
+
+**ONLY extract tasks for the vault owner** — skip tasks owned by others.
+
+Check existing task files in `Tasks/` to avoid duplicates (match by title similarity).
+
+**Present proposed tasks and wait for confirmation before creating:**
+```
+📋 Potential tasks found in [filename]:
+1. [Task description] — Priority: P3
+2. [Task description] — Priority: P3
+
+⏭️ Already exists (will skip):
+- [[T-NNN - Existing task]]
+
+Create these tasks? (Y/N or select which ones, e.g. "1" or "1,2")
+```
+
+After confirmation:
+- Create task files in `Tasks/` using the `/task` skill's create workflow (read counter, create files, increment counter)
+- Source field: wikilink to the processed note `[[YYYY-MM-DD - Title]]`
+- Status: inbox
+- Regenerate `Dashboard/Tasks.md`
+- Report created tasks: `✅ Created [[T-NNN - Title]]`
+
+If no potential tasks found, skip silently — don't show an empty tasks section.
+
+---
+
+### Step 4: Archive the original (non-meeting files only)
+
+**Meeting files**: already archived by the `/meeting` skill in Step 2 — skip.
+
+**All other files**: after processing:
 - Move original from `Inbox/[filename]` to `Archive/Notes Archive/[filename]`
 - If a file with the same name exists in archive, append `-2`, `-3`, etc.
 
 ---
 
-### Step 4: Link in today's journal
+### Step 5: Link in today's journal (non-meeting files only)
 
-For each processed file, add a link in today's journal (`journals/YYYY/MM-Month/DD-MM-YYYY.md`) under `## Notes`:
+**Meeting files**: already linked by the `/meeting` skill — skip.
+
+**All other files**: add a link in today's journal (`journals/YYYY/MM-Month/YYYY-MM-DD.md`) under `## Notes`:
 ```
 - [[YYYY-MM-DD - Title]] — processed from Inbox ([original filename])
 ```
@@ -101,17 +142,18 @@ If today's journal doesn't exist, skip this step.
 
 ---
 
-### Step 5: Summary
+### Step 6: Summary
 
 ```
 ✅ Processed N file(s) from Inbox
 
 [For each file:]
 - [filename] → [[YYYY-MM-DD - Title]] ([type])
+  [If tasks were created:] Tasks: [[T-NNN]], [[T-NNN]]
 
-📁 Originals archived to Archive/Notes Archive/
+📁 Originals archived
 
-📝 Linked in today's journal: [[DD-MM-YYYY]]
+📝 Linked in today's journal: [[YYYY-MM-DD]]
 
 Inbox remaining: N files
 ```

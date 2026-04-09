@@ -2,7 +2,7 @@
 id: T-000
 status: inbox
 priority:
-owner: Milan
+owner: [YOUR NAME]
 deadline:
 source:
 type: task

@@ -26,7 +26,7 @@ This skill should be FAST. Minimize round-trips:
 
 ### Phase 0: Mode Detection
 
-**Fetch today's journal** (`journals/YYYY/MM-Month/DD-MM-YYYY.md`) before any user interaction.
+**Fetch today's journal** (`journals/YYYY/MM-Month/YYYY-MM-DD.md`) before any user interaction.
 
 **Determine mode:**
 - If today's journal **does not exist**, or exists but has **empty mood, energy, and no focus items** → **Morning planning** (continue to Phase 1)
@@ -51,13 +51,13 @@ Route to the corresponding mode below.
 **1a. Fetch EVERYTHING in parallel before asking (no user interaction)**
 
 Do ALL of these simultaneously:
-- Check if `journals/YYYY/MM-Month/DD-MM-YYYY.md` exists (month folder format: `02-February`)
+- Check if `journals/YYYY/MM-Month/YYYY-MM-DD.md` exists (month folder format: `02-February`)
 - Read yesterday's journal for hints (mood, energy)
   - Extract "Tomorrow I start with" from yesterday's end-of-day section (if filled) -> use as first focus hint in Phase 3
 - If today's journal doesn't exist, create it using the template (see `templates/daily-note.md`)
 - If it exists, read it to see what's already filled
-- **Read all task files in `Tasks/`** (skip `_counter.md`) — build working lists by status
-- **Sync checkboxes**: read `Dashboard/Tasks.md`, detect any `- [x]` items, update those task files to status=done with changelog entry
+- **Read `Dashboard/Tasks.md`** to build working lists by status (in-progress, backlog, blocked, overdue). **Skip inbox tasks** — those are handled by `/task-review`. Only read individual task files when you need to update them (status changes, changelog entries).
+- **Sync checkboxes**: in `Dashboard/Tasks.md`, detect any `- [x]` items, update those task files to status=done with changelog entry, then archive them to `Tasks/Archive/YYYY/MM-Month/`
 
 Only AFTER all fetches complete, ask personal questions.
 
@@ -87,7 +87,7 @@ Use yesterday's journal values as hints. This is the only personal question roun
 Show pre-fetched data and ask for the calendar:
 
 ```
-Data ready - paste your calendar screenshot (and note what to do with overdue/inbox):
+Data ready - paste your calendar screenshot (and note what to do with overdue tasks):
 
 ---
 📋 Active Tasks (N):
@@ -100,13 +100,13 @@ Data ready - paste your calendar screenshot (and note what to do with overdue/in
 - [[T-NNN - Title]] (P2, due Mar 18)
 - [[T-NNN - Title]] (P3)
 
-📥 Inbox (N untriaged)
-
 🚫 Blocked (N):
 - [[T-NNN - Title]] — [reason]
 
 ⏰ Overdue (N):
 - [[T-NNN - Title]] (due Monday) - reschedule?
+
+_(N inbox tasks not shown — run /task-review to triage)_
 ```
 
 Wait for: calendar screenshot + any immediate triage decisions in one message.
@@ -121,7 +121,8 @@ Wait for: calendar screenshot + any immediate triage decisions in one message.
 
 Based on all context (mood/energy, calendar, tasks, P-Tasks):
 
-**Suggest max 3 focus items** for "My focus today (max 3)":
+**Suggest focus items** for "My focus today (aim for 3, flex up to 5)":
+- Default to 3. If the user has clear capacity (low meeting load, high energy), allow up to 5 — but flag when pushing past 3.
 - If yesterday's end-of-day "Tomorrow I start with" was filled: use it as the **first suggested focus item**
 - Prioritize: hard deadlines > P1 tasks > meetings needing prep > P2 tasks > overdue
 - Focus items = outcome-oriented (what you'll FINISH, not just work on)
@@ -138,6 +139,7 @@ Based on all context (mood/energy, calendar, tasks, P-Tasks):
 - `low_energy`: max 2 focus items
 - >50% meetings: reduce focus count
 - Both: 1 focus item only
+- High energy + low meeting load: suggest up to 5, but note which ones are stretch items
 
 **Present:**
 
@@ -147,7 +149,7 @@ Plan for today:
 Available focus time: ~Xh (N meetings, Zh total)
 Energy: Z/10 | Mood: W/10
 
-Focus (max 3):
+Focus (aim for 3, flex up to 5):
 1. [Focus item 1] - hard deadline
 2. [Focus item 2]
 3. [Focus item 3]
@@ -163,9 +165,9 @@ Anything to change? If OK, I'll update tasks and the journal.
 
 **3b. User confirms**
 
-If user adds too many items, challenge:
+If user pushes past 5 items, challenge:
 ```
-You have ~Xh of deep work time and Y tasks. That's ambitious.
+You have ~Xh of deep work time and Y tasks. That's a lot even for a high-energy day.
 Which are truly critical for TODAY? The rest can wait.
 ```
 
@@ -179,8 +181,7 @@ After confirmation, do ALL in parallel:
 - Regenerate `Dashboard/Tasks.md`
 
 **Journal update:**
-- Fill "My focus today (max 3)" with confirmed items
-- Mark `[x] Tasks for today are planned and prioritized.`
+- Fill "My focus today (aim for 3, flex up to 5)" with confirmed items
 - Ensure frontmatter `mood` and `energy` are set
 
 ### Phase 5: Summary
@@ -196,14 +197,14 @@ Focus:
 2. [[T-004 - Title]] — first pass
 3. Prep for customer call
 
-Tasks: N active | N inbox | N blocked
+Tasks: N active | N blocked
 - P1: [[T-NNN - Title]]
 - P2: [[T-NNN - Title]], [[T-NNN - Title]]
 - P3+: N others
 
-Overdue: N rescheduled | Inbox: N untriaged (run /task-review to triage)
+Overdue: N rescheduled
 
-Updated: journals/YYYY/MM-Month/DD-MM-YYYY.md
+Updated: journals/YYYY/MM-Month/YYYY-MM-DD.md
 
 ---
 🌙 End of day - update your journal:
@@ -250,8 +251,8 @@ Guided end-of-day wrap-up to fill the `🌙 End of Day` section of the journal.
 
 Do ALL of these in parallel:
 - Read today's journal (focus items, notes section)
-- **Read all task files in `Tasks/`** (skip `_counter.md`) — identify tasks that are `in-progress` or were moved to `done` today
-- Read `Dashboard/Tasks.md` — sync any `- [x]` checkboxes to task files (mark as done with changelog entry)
+- **Read `Dashboard/Tasks.md`** to identify tasks that are `in-progress` or were moved to `done` today. Only read individual task files when updating them (marking done, adding changelog entries).
+- **Sync checkboxes**: in `Dashboard/Tasks.md`, detect any `- [x]` items, update those task files to status=done with changelog entry, then archive to `Tasks/Archive/YYYY/MM-Month/`
 
 ### Step 2: Propose completed tasks + ask what's next (1 round)
 
@@ -287,12 +288,14 @@ After confirmation, do ALL in parallel:
 
 **Task updates:**
 - Mark confirmed tasks as `done` in their task files (add changelog entry: `YYYY-MM-DD: marked done via /today close`)
+- Archive completed task files to `Tasks/Archive/YYYY/MM-Month/` based on today's date
 - Regenerate `Dashboard/Tasks.md`
 
 **Journal update:**
-- Fill `#### ✅ Today I finished:` with the confirmed list (use `[[T-NNN - Title]]` wikilinks for tasks, plain text for non-task items)
+- Strike through completed focus items in the `#### 🚀 My focus today (max 3):` section: for each completed task, find its `T-NNN` ID in the numbered focus list and wrap the line text in `~~...~~` (e.g., `1. ~~[[T-018 - Title]] — context~~`). If a focus line references multiple tasks, only strike through when all are done. Skip already struck-through lines.
+- **Merge** the confirmed completed list into `#### ✅ Today I finished:` — do NOT overwrite items already there (tasks may have been logged during the day by the task skill). Deduplicate by task ID: if a `T-NNN` bullet already exists, skip it. Add only new items.
 - Fill `#### ➡️ Tomorrow I start with:` with the user's answer
-- Mark `#### 🔒 Work closed.` as complete (add the current time, e.g., `Work closed at 18:05.`)
+- Fill `#### 🔒 Work closed.` as complete (do NOT add a timestamp — the current time is not reliably available)
 
 ### Step 4: Summary
 
@@ -307,7 +310,7 @@ Day closed — [Day of week] [Date]
 ➡️ Tomorrow: [starting point]
 
 Tasks: N marked done | N still in progress
-Updated: journals/YYYY/MM-Month/DD-MM-YYYY.md
+Updated: journals/YYYY/MM-Month/YYYY-MM-DD.md
 
 Rest well. 🌙
 ```

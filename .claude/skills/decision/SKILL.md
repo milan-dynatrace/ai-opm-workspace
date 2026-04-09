@@ -18,7 +18,7 @@ The user will provide a decision topic/question via `$ARGUMENTS`. Examples:
 ## Workflow
 
 1. **Search the Obsidian vault**:
-   - Search recent meetings in `Meetings/` for prior discussions on this topic
+   - Search recent meetings in `Meetings/` (recursively) for prior discussions on this topic
    - Search daily notes in `journals/` (last 2 weeks) for related context
    - Search `Loose Notes/Work/` for related decisions or notes
    - Check `Dashboard/Weekly P-Tasks.md` for related priorities
@@ -87,7 +87,7 @@ The user will provide a decision topic/question via `$ARGUMENTS`. Examples:
    ```
 
 7. **Link the decision note**:
-   - Add link in today's journal (`journals/YYYY/MM-Month/DD-MM-YYYY.md`) under `## Notes`
+   - Add link in today's journal (`journals/YYYY/MM-Month/YYYY-MM-DD.md`) under `## Notes`
 
 8. **Draft communication**:
    - Create a ready-to-post Slack message or email announcing the decision

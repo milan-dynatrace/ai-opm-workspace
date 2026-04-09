@@ -29,7 +29,7 @@ Read in parallel:
 - The full Thoughts log (current + prior month) — look for related signals
 - Recent journals (last 14 days) — what's been weighing on the user's mind
 - `Loose Notes/Work/` — related decisions, especially ones that constrain or inform this idea
-- `Meetings/` — last 5 meeting notes for relevant discussions or customer signals
+- `Meetings/` — last 5 meeting notes (search recursively) for relevant discussions or customer signals
 
 **Build an internal model of:**
 1. What is this idea actually claiming? (The core assertion, stripped of framing)

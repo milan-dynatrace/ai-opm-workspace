@@ -30,7 +30,7 @@ The user provides via `$ARGUMENTS`:
 
 Also read in parallel:
 - Related decisions in `Loose Notes/Work/` (search by overlapping keywords and themes)
-- Related meeting notes in `Meetings/` (last 30 days)
+- Related meeting notes in `Meetings/` (last 30 days, search recursively)
 - Recent journals (last 14 days) — for urgency signals and what's been on the user's mind
 - `Dashboard/Weekly P-Tasks.md` — for strategic priorities this output should align with
 
@@ -187,7 +187,7 @@ For each source idea used:
 
 ### Step 8: Link in today's journal
 
-Add to `journals/YYYY/MM-Month/DD-MM-YYYY.md` under `## Notes`:
+Add to `journals/YYYY/MM-Month/YYYY-MM-DD.md` under `## Notes`:
 ```
 - 🧩 Synthesized: [[YYYY-MM-DD - Type - Title]] (from N ideas: [[Idea 1]], ...)
 ```

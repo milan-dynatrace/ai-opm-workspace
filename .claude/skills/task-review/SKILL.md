@@ -29,9 +29,10 @@ The user invokes this skill, optionally with a focus area:
 1. Read `Dashboard/Tasks.md` — detect any checked boxes (`- [x]`)
 2. For each checked item:
    - Read task file, update status → `done`, add changelog entry: `- YYYY-MM-DD — Status: [old] → done (marked complete in Obsidian)`
-3. Read ALL task files in `Tasks/` (skip `_counter.md`)
-4. Build working lists by status: inbox, backlog, in-progress, blocked, done, cancelled
-5. Note any tasks that are stale (no changelog entry in 14+ days, excluding done/cancelled)
+   - Archive the task file to `Tasks/Archive/YYYY/MM-Month/` based on today's date
+3. Read active task files in `Tasks/` (top-level only, skip `_counter.md` and `Archive/`)
+4. Build working lists by status: inbox, backlog, in-progress, blocked
+5. Note any tasks that are stale (no changelog entry in 14+ days)
 
 ---
 

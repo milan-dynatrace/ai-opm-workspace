@@ -37,16 +37,24 @@
 ├── Dashboard/             # Living documents (updated frequently)
 │   ├── Tasks.md           # Generated active task dashboard (checkboxes)
 │   └── people-profiles.md # Stakeholder communication profiles
-├── Tasks/                 # Individual task files (T-NNN - Title.md)
-│   └── _counter.md        # Auto-increment ID counter
+├── Tasks/                 # Active task files (T-NNN - Title.md)
+│   ├── _counter.md        # Auto-increment ID counter
+│   └── Archive/           # Completed/cancelled tasks (YYYY/MM-Month/)
+│       └── 2026/
+│           └── 03-March/  # Tasks filed by completion/cancellation date
 ├── Inbox/                 # Drop zone for unstructured content (processed with /process-inbox)
 ├── Thoughts/              # Monthly rolling log of raw thoughts (YYYY-MM.md)
 ├── Ideas/                 # Developed ideas with lifecycle tracking
-├── journals/              # Daily notes (YYYY/MM-Month/DD-MM-YYYY.md)
+├── journals/              # Daily notes (YYYY/MM-Month/YYYY-MM-DD.md)
 ├── Loose Notes/
 │   └── Work/              # Work notes, drafts, decisions, synthesized outputs
-├── Meetings/              # Meeting notes
+├── Meetings/              # Meeting notes (YYYY/MM-Month/YYYY-MM-DD - Title.md)
 ├── templates/             # Note templates
+├── Attachments/           # Images, screenshots, diagrams, slides
+│   ├── screenshots/       # Screen captures and UI screenshots
+│   ├── slides/            # Exported slide images and decks
+│   ├── diagrams/          # Architecture diagrams and flowcharts
+│   └── other/             # Any other media assets
 ├── Archive/
 │   ├── Meetings Archive/  # Raw meeting files before processing
 │   └── Notes Archive/     # Raw inbox files before processing
@@ -62,24 +70,24 @@
 
 | Type | Format | Example | Location |
 |------|--------|---------|----------|
-| Daily note | `DD-MM-YYYY.md` | `14-02-2026.md` | `journals/2026/02-February/` |
+| Daily note | `YYYY-MM-DD.md` | `2026-02-14.md` | `journals/2026/02-February/` |
 | Work note | `YYYY-MM-DD - Title.md` | `2026-02-14 - Decision - API scope.md` | `Loose Notes/Work/` |
-| Meeting note | `YYYY-MM-DD - Meeting description.md` | `2026-02-14 - Customer sync.md` | `Meetings/` |
+| Meeting note | `YYYY-MM-DD - Meeting description.md` | `2026-02-14 - Customer sync.md` | `Meetings/2026/02-February/` |
 | Inbox file | anything | `2026-02-14 - braindump.md` | `Inbox/` |
 | Archived raw file | `[original-filename]-raw.md` | `2026-02-14 - Customer sync-raw.md` | `Archive/[type] Archive/` |
 | Thought log | `YYYY-MM.md` | `2026-03.md` | `Thoughts/` |
-| Idea file | `YYYY-MM-DD - Title.md` | `2026-03-12 - Agentic explain-ability.md` | `Ideas/` |
+| Idea file | `IDEA-XXX - Title.md` | `IDEA-001 - OPM Skill for Customer Use Cases.md` | `Ideas/` |
 | Task file | `T-NNN - Title.md` | `T-001 - Ship API docs.md` | `Tasks/` |
 
 ### Task Tracking System
 
-**Storage**: Individual task files in `Tasks/`, generated dashboard in `Dashboard/Tasks.md`
+**Storage**: Active task files in `Tasks/`, archived (done/cancelled) in `Tasks/Archive/YYYY/MM-Month/`, generated dashboard in `Dashboard/Tasks.md`
 
 **Statuses**: `inbox` ↔ `backlog` → `in-progress` → `done` | `blocked` (needs reason) | `cancelled` (needs reason) | any state → `inbox` (deprioritize)
 
 **Priority levels**: P1 (critical, max 1) → P2 (high, max 2) → P3 (medium) → P4 (low) → P5 (optional)
 
-**Task fields**: id (auto), status, priority, owner (default: Milan), deadline, source (wikilink), type (task/goal), created date, changelog
+**Task fields**: id (auto), status, priority, owner (default: [YOUR NAME]), deadline, source (wikilink), type (task/goal), created date, changelog
 
 **Dashboard** (`Dashboard/Tasks.md`): Auto-generated view of active tasks with checkboxes. Check a box in Obsidian to mark done — next task-aware skill run syncs the change.
 
@@ -107,7 +115,7 @@ Tasks are tracked as individual files in `Tasks/` with a generated dashboard in 
 **Daily focus limits**:
 - Max **1 P1** task per day
 - Max **2 P2** tasks per day
-- Max **3 total focus items** per day
+- Default **3 focus items**, flex up to **5** if energy is high and meeting load is low
 - If energy or mood < 6: reduce to max 2 focus items
 - If >50% of the day is meetings: reduce to max 2 focus items
 
@@ -130,8 +138,6 @@ Tasks are tracked as individual files in `Tasks/` with a generated dashboard in 
 <!-- PERSONALIZE: Adjust these audience types to match your organization -->
 
 **Communication tone guidance**:
-- **Engineering teams**: Technical, specific, actionable (include links to specs, APIs, issues)
-- **Design teams**: User-focused, visual references, customer context
 - **Leadership**: Strategic, metrics-driven, concise, aligned with company goals
 - **Customers**: Professional, benefits-focused, clear ROI, no internal jargon
 
@@ -191,7 +197,7 @@ Tasks are tracked as individual files in `Tasks/` with a generated dashboard in 
 - When analyzing journals, look for **patterns across days**, not individual entries
 - Be specific and direct - reference concrete notes and patterns
 - When creating notes, follow existing naming conventions and use appropriate templates
-- Link new notes in today's journal (`journals/YYYY/MM-Month/DD-MM-YYYY.md`)
+- Link new notes in today's journal (`journals/YYYY/MM-Month/YYYY-MM-DD.md`)
 - When creating work notes, save in `Loose Notes/Work/` and link from daily note
 - **Always archive raw source files before processing** — meeting notes go to `Archive/Meetings Archive/`, inbox files go to `Archive/Notes Archive/`
 - When processing content from `Inbox/`, move the original to `Archive/Notes Archive/` after creating the structured output
@@ -231,3 +237,7 @@ Daily notes follow the template in `templates/daily-note.md`:
 ### Decision documentation
 **Pattern**: Decisions happen in Slack or meetings but aren't always documented.
 **Solution**: `/decision` skill creates structured decision notes with `- [ ]` follow-up tasks, links them in the daily journal.
+
+### Focus item strikethrough on completion
+**Pattern**: When a task is marked as done and appears in the daily note's "My focus today" section, the focus item should be visually marked as complete.
+**Solution**: Wrap the completed focus item text in `~~strikethrough~~` so it's clearly done at a glance. See the **Focus Item Strikethrough** section in the task skill for matching and formatting rules.

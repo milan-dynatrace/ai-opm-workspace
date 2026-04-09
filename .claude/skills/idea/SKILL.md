@@ -40,7 +40,7 @@ Read the following in parallel:
 - All files in `Ideas/` — full content
 - Current and prior month in `Thoughts/` — read the full log
 - Recent journals (last 14 days) — what has been on the user's mind
-- `Meetings/` — last 5 meeting notes for relevant discussions
+- `Meetings/` — last 5 meeting notes (search recursively) for relevant discussions
 - `Loose Notes/Work/` — related decisions or notes
 
 **Reason about connections** — think like the user, not a search engine:
@@ -75,8 +75,9 @@ Wait for response. All fields optional — if user skips, leave them blank or us
 
 ### Step 4: Create the idea file
 
-- **Location**: `Ideas/YYYY-MM-DD - [Title].md`
+- **Location**: `Ideas/IDEA-XXX - [Title].md`
 - **Template**: `templates/idea-note.md`
+- **ID**: Read `Ideas/_counter.md` to get the next ID. Format as `IDEA-XXX` (zero-padded to 3 digits, e.g., `IDEA-001`). After creating the file, increment `next_id` in `Ideas/_counter.md`.
 - **Date**: today
 
 Fill the sections:
@@ -95,16 +96,16 @@ Fill the sections:
 
 In `Thoughts/YYYY-MM.md`, append an annotation to the source entry:
 ```markdown
-> **YYYY-MM-DD**: Promoted to idea → [[Ideas/YYYY-MM-DD - Title]]
+> **YYYY-MM-DD**: Promoted to idea → [[Ideas/IDEA-XXX - Title]]
 ```
 
 ---
 
 ### Step 6: Link in today's journal
 
-In `journals/YYYY/MM-Month/DD-MM-YYYY.md` under `## Notes`:
+In `journals/YYYY/MM-Month/YYYY-MM-DD.md` under `## Notes`:
 ```
-- 💡 New idea: [[YYYY-MM-DD - Title]] ([status: seed])
+- 💡 New idea: [[IDEA-XXX - Title]] ([status: seed])
 ```
 
 ---
@@ -112,7 +113,7 @@ In `journals/YYYY/MM-Month/DD-MM-YYYY.md` under `## Notes`:
 ### Step 7: Output
 
 ```
-💡 Idea created: [[YYYY-MM-DD - Title]]
+💡 Idea created: [[IDEA-XXX - Title]]
 Status: seed
 
 Related context linked:

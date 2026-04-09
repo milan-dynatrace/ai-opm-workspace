@@ -29,7 +29,8 @@ If the intent is ambiguous, infer the most likely action and proceed. Only ask i
 ## Task System Reference
 
 ### Storage
-- **Task files**: `Tasks/T-NNN - Title.md` (one file per task)
+- **Active task files**: `Tasks/T-NNN - Title.md` (one file per task — only active tasks: inbox, backlog, in-progress, blocked)
+- **Archived tasks**: `Tasks/Archive/YYYY/MM-Month/T-NNN - Title.md` (done/cancelled tasks, filed by completion/cancellation date)
 - **Counter**: `Tasks/_counter.md` (frontmatter `next_id` field)
 - **Dashboard**: `Dashboard/Tasks.md` (generated, not manually edited)
 
@@ -47,7 +48,7 @@ inbox ↔ backlog → in-progress → done
 | id | auto | T-NNN | Auto-incrementing, zero-padded to 3 digits |
 | status | auto | inbox | |
 | priority | no | _(empty)_ | P1-P5, set during review or explicitly |
-| owner | no | Milan | Only change if delegated |
+| owner | no | [YOUR NAME] | Only change if delegated |
 | deadline | no | _(empty)_ | YYYY-MM-DD format |
 | source | no | _(empty)_ | Wikilink to originating note |
 | type | no | task | `task` or `goal` — never forced, only set if user specifies |
@@ -65,7 +66,7 @@ See `templates/task-note.md` for the file structure.
 1. Read `Tasks/_counter.md` → get `next_id`
 2. Format ID: `T-` + zero-padded to 3 digits (e.g., `T-001`, `T-012`)
 3. Create file `Tasks/T-NNN - [Title].md` using template:
-   - Fill frontmatter: id, status=inbox, owner=Milan, created=today
+   - Fill frontmatter: id, status=inbox, owner=[YOUR NAME], created=today
    - Fill any fields the user provided (deadline, priority, source, type)
    - Title as `# heading`
    - Description if provided (otherwise leave empty)
@@ -87,8 +88,15 @@ See `templates/task-note.md` for the file structure.
    - `done` can come from any active state
 3. Update frontmatter `status`
 4. Append to changelog: `- YYYY-MM-DD — Status: [old] → [new]` (include reason for blocked/cancelled)
-5. Regenerate `Dashboard/Tasks.md`
-6. Report: `✅ T-NNN: [old] → [new]`
+5. **If new status is `done` or `cancelled`**: archive the task file:
+   - Determine archive path: `Tasks/Archive/YYYY/MM-Month/` based on today's date (the completion/cancellation date)
+   - Create the archive folder if it doesn't exist
+   - Move the task file from `Tasks/` to the archive folder
+6. **If new status is `done`**: update today's daily journal (see **Daily Journal Updates** below):
+   - Strike through matching focus item
+   - Append task to "Today I finished" section
+7. Regenerate `Dashboard/Tasks.md`
+8. Report: `✅ T-NNN: [old] → [new]` (add `(archived)` if moved)
 
 ### Update Fields
 
@@ -107,15 +115,16 @@ See `templates/task-note.md` for the file structure.
 
 ### Query Single
 
-1. Read the task file
+1. Read the task file (check `Tasks/` first, then `Tasks/Archive/` if not found)
 2. Display: title, status, priority, owner, deadline, source, type, last 3 changelog entries
 3. If user wants full changelog, show all entries
 
 ### Query List
 
-1. Read all task files in `Tasks/` (skip `_counter.md`)
+1. Read active task files in `Tasks/` (top-level only, skip `_counter.md` and `Archive/`)
 2. Filter by the requested criteria (status, priority, owner, etc.)
-3. Display as a compact list:
+3. If user explicitly asks for done/cancelled/archived/history tasks, also read `Tasks/Archive/` recursively
+4. Display as a compact list:
    ```
    📋 [Status] tasks (N):
    - [[T-001 - Title]] (P2, due Mar 15) — last: [latest changelog entry]
@@ -128,9 +137,9 @@ See `templates/task-note.md` for the file structure.
 
 When regenerating `Dashboard/Tasks.md`:
 
-1. Read ALL task files in `Tasks/` (skip `_counter.md`)
+1. Read active task files in `Tasks/` (top-level only, skip `_counter.md` and `Archive/`)
 2. Group by status: in-progress, backlog, inbox, blocked
-3. Within each group, sort by: priority (P1 first, empty last), then deadline (soonest first), then created date
+3. Within each group, sort by: deadline (earliest first, tasks with no deadline at bottom), then task ID (ascending) for tasks with the same or no deadline
 4. **Skip done and cancelled tasks** — they're not shown on the dashboard
 5. Write the dashboard with this structure:
 
@@ -175,7 +184,43 @@ updated: YYYY-MM-DD
 When any task-aware skill runs, check `Dashboard/Tasks.md` for checked boxes (`- [x]`):
 - For each checked item, extract the task ID
 - Update that task file: status → done, add changelog entry
+- Archive the task file to `Tasks/Archive/YYYY/MM-Month/` based on today's date
+- Update today's daily journal for each completed task (see **Daily Journal Updates** below):
+  - Strike through matching focus items
+  - Append tasks to "Today I finished" section
 - Regenerate the dashboard (which removes done tasks)
+
+### Daily Journal Updates
+
+Whenever a task is marked as `done` (via status update, checkbox sync, or day close), update today's daily note (`journals/YYYY/MM-Month/YYYY-MM-DD.md`) with **both** actions below. If today's daily note doesn't exist, skip silently.
+
+#### Focus Item Strikethrough
+
+Check the `#### 🚀 My focus today (max 3):` section for the task ID.
+
+**How to match**: Search focus item lines (numbered list under the heading) for the task ID pattern `T-NNN` (e.g., `T-018`).
+
+**How to strike through**: Wrap the entire focus item text (after the number prefix) in `~~...~~`. Example:
+
+```
+Before: 1. [[T-018 - Answer Kay's questions]] — finish & send (due today) 🔥
+After:  1. ~~[[T-018 - Answer Kay's questions]] — finish & send (due today) 🔥~~
+```
+
+**Rules**:
+- Only strike through if the focus item contains the completed task's ID
+- If a focus line references multiple tasks (e.g., `[[T-011 - ...]] + [[T-021 - ...]]`), only strike through when ALL referenced tasks are done
+- Skip if the line is already struck through
+
+#### Completion Log in "Today I finished"
+
+Append the completed task to the `#### ✅ Today I finished:` section as a bullet: `- [[T-NNN - Title]]`.
+
+**Rules**:
+- Append to the existing list — never overwrite items already there
+- If the section only has `- ` (empty placeholder), replace it with the first entry
+- Skip if a bullet containing the same `T-NNN` ID already exists (avoid duplicates)
+- This applies whether or not the task was in the focus list — all completed tasks get logged
 
 ---
 
