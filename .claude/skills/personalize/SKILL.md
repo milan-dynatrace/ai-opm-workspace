@@ -63,37 +63,17 @@ Ask about MCP integrations:
 
 **Questions (4 in AskUserQuestion)**:
 
-1. **Todoist**: "Do you use Todoist for task management?"
-   - Options: "Yes, already set up", "Yes, need help setting up", "No, I use something else", "No task manager"
-
-2. **GitHub**: "Do you use GitHub for issue/PR tracking?"
+1. **GitHub**: "Do you use GitHub for issue/PR tracking?"
    - Options: "Yes, already set up", "Yes, need help setting up", "No"
 
-3. **Other MCPs**: "Do you have other MCP servers you want to configure?"
-   - Options: "No, just Todoist and GitHub", "Yes, I have documentation/docs MCP", "Yes, I have Notion MCP", "Yes, other"
+2. **Other MCPs**: "Do you have other MCP servers you want to configure?"
+   - Options: "No, just GitHub", "Yes, I have documentation/docs MCP", "Yes, I have Notion MCP", "Yes, other"
 
-4. **People profiles**: "Do you want to set up stakeholder communication profiles?"
+3. **People profiles**: "Do you want to set up stakeholder communication profiles?"
    - Options: "Yes, I'll add key people now", "Later, skip for now"
 
-### Phase 4: Todoist Configuration (conditional)
 
-**Only if user selected Todoist "Yes, already set up" or "Yes, need help setting up":**
-
-If "need help setting up":
-- Guide them through: `claude mcp add todoist --transport streamable-http --url https://ai.todoist.net/mcp`
-- Tell them to restart Claude Code after adding the MCP, then run `/personalize` again
-- Skip to Phase 6 (apply what we have so far)
-
-If "already set up":
-1. Call `mcp__todoist__find-projects` to list all projects
-2. Show the user a list: "Here are your Todoist projects: [list]. Which one should Claude create work tasks in?"
-3. Once the user picks a project, call `mcp__todoist__find-sections` with the selected `projectId`
-4. Show sections: "These sections exist in [project]: [list]. Which section should tasks go to?"
-5. If no sections exist, suggest creating one: "No sections found. Want me to create a 'Backlog' section?"
-6. Confirm: "Got it — project '[name]' (ID: [id]), section '[name]' (ID: [id]). Correct?"
-7. Update `shared/todoist-config.md` with the confirmed IDs
-
-### Phase 4b: GitHub Configuration (conditional)
+### Phase 4: GitHub Configuration (conditional)
 
 **Only if user selected GitHub "Yes, already set up" or "Yes, need help setting up":**
 
@@ -108,7 +88,7 @@ If "already set up":
 
 ### Phase 4c: Other MCP Configuration (conditional)
 
-**Only if user selected an option other than "No, just Todoist and GitHub":**
+**Only if user selected an option other than "No, just GitHub":**
 
 For each MCP the user mentioned:
 - Ask for a name and brief description of what it's used for
@@ -153,8 +133,7 @@ Update all files based on collected answers:
   - If "English only": keep as-is
   - If "Mixed": replace the comment block with active rules specifying the personal language from Phase 2
 - MCP servers section:
-  - Todoist: update `[YOUR PROJECT]` and `[YOUR SECTION]` with actual names (both in the MCP section AND the Todoist Integration section at the bottom)
-  - GitHub: update `[YOUR REPO]` entries with repos from Phase 4b. If multiple repos, add additional entries
+  - GitHub: update `[YOUR REPO]` entries with repos from Phase 4. If multiple repos, add additional entries
   - Optional MCPs: uncomment the optional MCP template and fill in for any MCPs from Phase 4c
   - If a tool was not configured, add a comment: `<!-- Not configured. Run /personalize to set up. -->`
 - Communication tone guidance:
@@ -163,21 +142,14 @@ Update all files based on collected answers:
   - If they selected "Customers / External", keep the customer entry; otherwise remove it
 - Available Skills table: no changes needed (already correct)
 
-**2. shared/todoist-config.md** — If Todoist configured in Phase 4:
-- `[YOUR PROJECT NAME]` → project name
-- `[YOUR PROJECT ID]` → project ID from MCP lookup
-- `[YOUR SECTION NAME]` → section name
-- `[YOUR SECTION ID]` → section ID from MCP lookup
-- Also update the JSON template at the bottom
-
-**3. Dashboard/people-profiles.md** — If people provided in Phase 5:
+**2. Dashboard/people-profiles.md** — If people provided in Phase 5:
 - Write the complete file with all profiles
 
-**4. Dashboard/Weekly P-Tasks.md** — Initialize with current week:
+**3. Dashboard/Weekly P-Tasks.md** — Initialize with current week:
 - Set the week header to the current week's date range
 - Add empty P1-P5 sections so the user can start planning immediately
 
-**5. templates/daily-note.md** — If "Mixed" language selected:
+**4. templates/daily-note.md** — If "Mixed" language selected:
 - Add a comment at the top: `<!-- Language rule: Work sections in English, personal reflections in [language] -->`
 
 ### Phase 7: Summary + Next Steps
@@ -187,7 +159,6 @@ Workspace personalized!
 
 Updated:
 - CLAUDE.md (your identity, company context, MCP config)
-[if Todoist] - Todoist config (project: [name], section: [name])
 [if GitHub] - GitHub repos ([N] repositories configured)
 [if people] - People profiles ([N] profiles created)
 [if mixed lang] - Language rules ([language] for personal, English for work)
@@ -216,5 +187,4 @@ See setup/SETUP-GUIDE.md for advanced configuration.
 - If an MCP isn't configured yet, provide the setup command and suggest running /personalize again after
 - Don't ask about features the user doesn't need — respect "skip" and "later" answers
 - Keep the total interaction to 4-5 rounds maximum
-- When calling Todoist MCP functions, handle errors gracefully: if a call fails, tell the user and offer to configure manually
 - The summary in Phase 7 should only mention items that were actually configured — skip lines for skipped tools
